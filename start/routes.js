@@ -19,3 +19,9 @@ const Route = use('Route')
 Route.get('/', () => {
   return { greeting: 'Hello world in JSON' }
 })
+
+Route.group(() => {
+  Route.resource('/', 'VehicleController').apiOnly()
+  Route.get('photo/:path', 'VehicleController.photo')
+}).prefix('vehicle')
+
