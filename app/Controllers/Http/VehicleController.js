@@ -4,8 +4,13 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
+const fs = require('fs')
+
 const Vehicle = use('App/Models/Vehicle')
 const Helpers = use('Helpers')
+
+const removeFile = Helpers.promisify(fs.unlink)
+const exists = Helpers.promisify(fs.exists)
 
 /**
  * Resourceful controller for interacting with vehicles
@@ -14,9 +19,18 @@ class VehicleController {
   /**
    * Show a list of all vehicles.
    * GET vehicles
+   *
+   * @param {Request} ctx.request
    */
-  async index () {
-    const vehicles = await Vehicle.all()
+  async index ({ request }) {
+    const page = request.get().page
+    let vehicles
+
+    if (page != null) {
+      vehicles = await Vehicle.query().paginate(page, 2)
+    } else {
+      vehicles = await Vehicle.all()
+    }
 
     return vehicles
   }
@@ -27,9 +41,8 @@ class VehicleController {
    *
    * @param {object} ctx
    * @param {Request} ctx.request
-   * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
+  async store ({ request }) {
     const data = request.all()
     const photo = request.file('photo')
 
@@ -37,7 +50,7 @@ class VehicleController {
     vehicle.photo = `${vehicle.id}.${photo.subtype}`
     await vehicle.save()
 
-    await photo.move(Helpers.tmpPath('uploads/veiculos'), {
+    await photo.move(Helpers.tmpPath('uploads/vehicles'), {
       name: vehicle.photo
     })
 
@@ -49,11 +62,16 @@ class VehicleController {
    * GET vehicles/:id
    *
    * @param {object} ctx
-   * @param {Request} ctx.request
    * @param {Response} ctx.response
-   * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
+  async show ({ params, response }) {
+    const vehicle = await Vehicle.find(params.id)
+
+    if (!vehicle) {
+      return response.notFound()
+    }
+
+    return vehicle
   }
 
   /**
@@ -65,6 +83,27 @@ class VehicleController {
    * @param {Response} ctx.response
    */
   async update ({ params, request, response }) {
+    const vehicle = await Vehicle.find(params.id)
+
+    if (!vehicle) {
+      return response.notFound()
+    }
+
+    const data = request.all()
+    data.photo = vehicle.photo
+    vehicle.merge(data)
+    vehicle.save()
+
+    const photo = request.file('photo')
+    if (photo) {
+      await removeFile(Helpers.tmpPath(`uploads/vehicles/${vehicle.photo}`))
+
+      await photo.move(Helpers.tmpPath('uploads/vehicles'), {
+        name: vehicle.photo
+      })
+    }
+
+    return vehicle
   }
 
   /**
@@ -76,6 +115,14 @@ class VehicleController {
    * @param {Response} ctx.response
    */
   async destroy ({ params, request, response }) {
+    const vehicle = await Vehicle.find(params.id)
+
+    if (!vehicle) {
+      return response.notFound()
+    }
+
+    await removeFile(Helpers.tmpPath(`uploads/vehicles/${vehicle.photo}`))
+    await vehicle.delete()
   }
 
   /**
@@ -86,7 +133,7 @@ class VehicleController {
    * @param {Response} ctx.response
    */
   async photo ({ params, response }) {
-    return response.download(Helpers.tmpPath(`uploads/veiculos/${params.path}`))
+    return response.download(Helpers.tmpPath(`uploads/vehicles/${params.path}`))
   }
 }
 

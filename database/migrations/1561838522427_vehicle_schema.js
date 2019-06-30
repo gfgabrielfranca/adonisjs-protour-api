@@ -7,7 +7,7 @@ class VehicleSchema extends Schema {
   up () {
     this.create('vehicles', (table) => {
       table.increments()
-      table.string('photo', 64).unique()
+      table.string('photo').unique()
       table.string('name', 128).notNullable()
       table.string('description', 255).nullable()
       table.boolean('status').notNullable().defaultTo(true)

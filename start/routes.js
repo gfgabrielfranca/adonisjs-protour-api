@@ -16,12 +16,21 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
-Route.get('/', () => {
-  return { greeting: 'Hello world in JSON' }
-})
+const Env = use('Env')
 
-Route.group(() => {
-  Route.resource('/', 'VehicleController').apiOnly()
-  Route.get('photo/:path', 'VehicleController.photo')
-}).prefix('vehicle')
+Route.get('/', ({ response }) => {
+  response.ok(Env.get('APP_NAME', 'APP'))
+}).as('app')
 
+Route.resource('vehicle', 'VehicleController')
+  .apiOnly()
+  .validator(new Map([
+    [['vehicle.store'], ['StoreVehicle']],
+    [['vehicle.update'], ['UpdateVehicle']]
+  ]))
+
+Route.get('vehicle/photo/:path', 'VehicleController.photo').as('vehicle.photo')
+
+Route.any('*', ({ response }) => {
+  response.notFound()
+}).as('all')
