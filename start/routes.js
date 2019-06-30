@@ -22,14 +22,30 @@ Route.get('/', ({ response }) => {
   response.ok(Env.get('APP_NAME', 'APP'))
 }).as('app')
 
-Route.resource('vehicle', 'VehicleController')
+Route.resource('vehicles', 'VehicleController')
   .apiOnly()
   .validator(new Map([
-    [['vehicle.store'], ['StoreVehicle']],
-    [['vehicle.update'], ['UpdateVehicle']]
+    [['vehicles.store'], ['StoreVehicle']],
+    [['vehicles.update'], ['UpdateVehicle']]
   ]))
 
-Route.get('vehicle/photo/:path', 'VehicleController.photo').as('vehicle.photo')
+Route.get('vehicles/photo/:path', 'VehicleController.photo').as('vehicles.photo')
+
+Route.resource('services', 'ServiceController')
+  .apiOnly()
+  .validator(new Map([
+    [['services.store'], ['StoreService']],
+    [['services.update'], ['UpdateService']]
+  ]))
+
+Route.get('services/icon/:path', 'ServiceController.icon').as('services.icon')
+
+Route.resource('clientes', 'ClientController')
+  .apiOnly()
+  .validator(new Map([
+    [['clientes.store'], ['StoreCliente']],
+    [['clientes.update'], ['UpdateCliente']]
+  ]))
 
 Route.any('*', ({ response }) => {
   response.notFound()

@@ -3,7 +3,7 @@
 class StoreVehicle {
   get rules () {
     return {
-      photo: 'required|file|file_ext:png,jpg|file_types:image',
+      photo: 'required|file|file_ext:png,jpg|file_size:2mb|file_types:image',
       name: 'required|max:128',
       description: 'max:255',
       status: 'boolean',

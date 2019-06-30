@@ -10,7 +10,7 @@ const Vehicle = use('App/Models/Vehicle')
 const Helpers = use('Helpers')
 
 const removeFile = Helpers.promisify(fs.unlink)
-const exists = Helpers.promisify(fs.exists)
+const exists = Helpers.promisify(fs.stat)
 
 /**
  * Resourceful controller for interacting with vehicles
@@ -92,16 +92,19 @@ class VehicleController {
     const data = request.all()
     data.photo = vehicle.photo
     vehicle.merge(data)
-    vehicle.save()
 
     const photo = request.file('photo')
     if (photo) {
       await removeFile(Helpers.tmpPath(`uploads/vehicles/${vehicle.photo}`))
 
+      vehicle.photo = `${vehicle.id}.${photo.subtype}`
+
       await photo.move(Helpers.tmpPath('uploads/vehicles'), {
         name: vehicle.photo
       })
     }
+
+    vehicle.save()
 
     return vehicle
   }
@@ -123,6 +126,8 @@ class VehicleController {
 
     await removeFile(Helpers.tmpPath(`uploads/vehicles/${vehicle.photo}`))
     await vehicle.delete()
+
+    return response.ok()
   }
 
   /**
@@ -133,6 +138,12 @@ class VehicleController {
    * @param {Response} ctx.response
    */
   async photo ({ params, response }) {
+    try {
+      await exists(Helpers.tmpPath(`uploads/vehicles/${params.path}`))
+    } catch (error) {
+      return response.notFound()
+    }
+
     return response.download(Helpers.tmpPath(`uploads/vehicles/${params.path}`))
   }
 }
