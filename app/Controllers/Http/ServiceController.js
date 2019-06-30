@@ -28,7 +28,7 @@ class ServiceController {
     let services
 
     if (page != null) {
-      services = await Service.query().paginate(page, 2)
+      services = await Service.query().paginate(page, 10)
     } else {
       services = await Service.all()
     }

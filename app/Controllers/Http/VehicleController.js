@@ -27,7 +27,7 @@ class VehicleController {
     let vehicles
 
     if (page != null) {
-      vehicles = await Vehicle.query().paginate(page, 2)
+      vehicles = await Vehicle.query().paginate(page, 10)
     } else {
       vehicles = await Vehicle.all()
     }

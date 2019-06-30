@@ -49,10 +49,10 @@ Route.resource('clientes', 'ClientController')
 
 Route.resource('reservations', 'ReservationController')
   .apiOnly()
-  // .validator(new Map([
-  //   [['reservations.store'], ['StoreReservation']],
-  //   [['reservations.update'], ['UpdateReservation']]
-  // ]))
+  .validator(new Map([
+    [['reservations.store'], ['StoreReservation']],
+    [['reservations.update'], ['UpdateReservation']]
+  ]))
 
 Route.any('*', ({ response }) => {
   response.notFound()

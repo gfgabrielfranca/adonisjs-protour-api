@@ -24,7 +24,7 @@ class ReservationController {
     let reservations
 
     if (page != null) {
-      reservations = await Reservation.query().with('services').with('vehicles').with('clients').paginate(page, 2)
+      reservations = await Reservation.query().with('services').with('vehicles').with('clients').paginate(page, 10)
     } else {
       reservations = await Reservation.query().with('services').with('vehicles').with('clients').fetch()
     }

@@ -22,7 +22,7 @@ class ClientController {
     let clients
 
     if (page != null) {
-      clients = await Client.query().paginate(page, 2)
+      clients = await Client.query().paginate(page, 10)
     } else {
       clients = await Client.all()
     }
