@@ -10,7 +10,7 @@ class StoreReservation {
       reservation: `required|date|dateFormat:YYYY-MM-DD|before:${devolution.getFullYear()}-${devolution.getMonth() + 1}-${devolution.getDate() + 2}`,
       status: 'required|in:PENDENTE,APROVADO,CANCELADO',
       client_id: 'required|integer|above:0',
-      vehicle_id: 'required|integer|above:1'
+      vehicle_id: 'required|integer|above:0'
     }
   }
 }

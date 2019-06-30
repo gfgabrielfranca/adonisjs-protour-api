@@ -10,7 +10,7 @@ class UpdateReservation {
       reservation: `date|dateFormat:YYYY-MM-DD|before:${devolution.getFullYear()}-${devolution.getMonth() + 1}-${devolution.getDate() + 2}`,
       status: 'in:PENDENTE,APROVADO,CANCELADO',
       client_id: 'integer|above:0',
-      vehicle_id: 'integer|above:1'
+      vehicle_id: 'integer|above:0'
     }
   }
 }
