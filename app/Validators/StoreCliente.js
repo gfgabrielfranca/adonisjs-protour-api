@@ -5,10 +5,10 @@ class StoreCliente {
     return {
       name: 'required|max:128',
       email: 'required|email',
-      telefone: 'required',
-      nacionalidade: 'required|max:128',
-      documento: 'required|in:CPF,Passaporte,Estrangeiro',
-      numero_documento: 'required'
+      phone: 'required',
+      nationality: 'required|max:128',
+      document: 'required|in:CPF,Passaporte,Estrangeiro',
+      document_number: 'required'
     }
   }
 }

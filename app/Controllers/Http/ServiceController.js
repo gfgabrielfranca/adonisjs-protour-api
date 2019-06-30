@@ -105,7 +105,7 @@ class ServiceController {
       })
     }
 
-    service.save()
+    await service.save()
 
     return service
   }

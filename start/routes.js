@@ -47,6 +47,13 @@ Route.resource('clientes', 'ClientController')
     [['clientes.update'], ['UpdateCliente']]
   ]))
 
+Route.resource('reservations', 'ReservationController')
+  .apiOnly()
+  // .validator(new Map([
+  //   [['reservations.store'], ['StoreReservation']],
+  //   [['reservations.update'], ['UpdateReservation']]
+  // ]))
+
 Route.any('*', ({ response }) => {
   response.notFound()
 }).as('all')

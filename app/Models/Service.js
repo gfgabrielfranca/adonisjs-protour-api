@@ -8,6 +8,10 @@ class Service extends Model {
   getIcon () {
     return `${Env.get('APP_URL')}/services/icon/${this.icon}`
   }
+
+  reservations () {
+    return this.belongsToMany('App/Models/Reservation')
+  }
 }
 
 module.exports = Service

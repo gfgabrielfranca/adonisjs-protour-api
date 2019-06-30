@@ -5,8 +5,8 @@ class UpdateCliente {
     return {
       name: 'max:128',
       email: 'email',
-      nacionalidade: 'max:128',
-      documento: 'in:CPF,Passaporte,Estrangeiro',
+      nationality: 'max:128',
+      document_number: 'in:CPF,Passaporte,Estrangeiro',
     }
   }
 }

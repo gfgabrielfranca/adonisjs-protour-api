@@ -9,8 +9,8 @@ class ServiceSchema extends Schema {
       table.increments()
       table.string('name', 128).notNullable()
       table.string('icon').unique()
-      table.integer('quantity').notNullable()
-      table.float('value').notNullable()
+      table.integer('quantity').notNullable().unsigned()
+      table.float('value').notNullable().unsigned()
       table.timestamps()
     })
   }
