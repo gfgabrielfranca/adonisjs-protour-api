@@ -124,8 +124,8 @@ class VehicleController {
       return response.notFound()
     }
 
-    await removeFile(Helpers.tmpPath(`uploads/vehicles/${vehicle.photo}`))
     await vehicle.delete()
+    await removeFile(Helpers.tmpPath(`uploads/vehicles/${vehicle.photo}`))
 
     return response.ok()
   }
