@@ -7,8 +7,8 @@ class ReservationSchema extends Schema {
   up () {
     this.create('reservations', (table) => {
       table.increments()
-      table.date('reservation').notNullable()
-      table.date('devolution').notNullable()
+      table.timestamps('reservation').notNullable()
+      table.timestamps('devolution').notNullable()
       table.enu('status', ['PENDENTE', 'APROVADO', 'CANCELADO']).notNullable()
       table
         .integer('client_id')

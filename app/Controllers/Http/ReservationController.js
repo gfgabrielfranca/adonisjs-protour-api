@@ -61,10 +61,11 @@ class ReservationController {
         }
       }
 
-      await reservation.load('services')
-      await reservation.load('vehicles')
-      await reservation.load('clients')
     }
+
+    await reservation.load('services')
+    await reservation.load('vehicles')
+    await reservation.load('clients')
 
     return reservation
   }
@@ -107,14 +108,18 @@ class ReservationController {
 
     const {services, ...data} = request.all()
 
-    const vehicle = await Vehicle.find(data.vehicle_id)
-    if (!vehicle) {
-      return response.notFound({error:'vehicle not found'})
+    if (data.vehicle_id) {
+      const vehicle = await Vehicle.find(data.vehicle_id)
+      if (!vehicle) {
+        return response.notFound({error:'vehicle not found'})
+      }
     }
 
-    const client = await Client.find(data.client_id)
-    if (!client) {
-      return response.notFound({error:'client not found'})
+    if (data.client_id) {
+      const client = await Client.find(data.client_id)
+      if (!client) {
+        return response.notFound({error:'client not found'})
+      }
     }
 
     reservation.merge(data)
@@ -129,10 +134,11 @@ class ReservationController {
         }
       }
 
-      await reservation.load('services')
-      await reservation.load('vehicles')
-      await reservation.load('clients')
     }
+
+    await reservation.load('services')
+    await reservation.load('vehicles')
+    await reservation.load('clients')
 
     return reservation
   }

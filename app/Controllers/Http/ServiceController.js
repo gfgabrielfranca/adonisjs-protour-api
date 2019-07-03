@@ -124,8 +124,8 @@ class ServiceController {
       return response.notFound()
     }
 
-    await removeFile(Helpers.tmpPath(`uploads/services/${service.icon}`))
     await service.delete()
+    await removeFile(Helpers.tmpPath(`uploads/services/${service.icon}`))
 
     return response.ok()
   }

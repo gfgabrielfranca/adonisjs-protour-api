@@ -2,12 +2,11 @@
 
 class StoreReservation {
   get rules () {
-    let { devolution } = this.ctx.request.only(['devolution'])
-    devolution = new Date(devolution)
+    const id = this.ctx.params.id;
 
     return {
-      devolution: 'required|date|dateFormat:YYYY-MM-DD',
-      reservation: `required|date|dateFormat:YYYY-MM-DD|before:${devolution.getFullYear()}-${devolution.getMonth() + 1}-${devolution.getDate() + 2}`,
+      reservation: `required|date|checkDatetimeFormat|checkDatetimeBefore:devolution,Reservation,${id}`,
+      devolution: `required|date|checkDatetimeFormat|checkDatetimeAfter:reservation,Reservation,${id}`,
       status: 'required|in:PENDENTE,APROVADO,CANCELADO',
       client_id: 'required|integer|above:0',
       vehicle_id: 'required|integer|above:0'
