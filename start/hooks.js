@@ -2,7 +2,7 @@ const { hooks } = require('@adonisjs/ignitor')
 
 hooks.after.providersBooted(() => {
   const Validator = use('Validator')
-  const Moment = use("moment")
+  const moment = use("moment")
 
   const checkDatetimeFormat = async (data, field, message, args, get) => {
     const value = get(data, field)
@@ -11,7 +11,7 @@ hooks.after.providersBooted(() => {
       return
     }
 
-    if (Moment(value, "YYYY-MM-DD HH:mm:ss", true).isValid() === false) {
+    if (moment(value, "YYYY-MM-DD HH:mm:ss", true).isValid() === false) {
       throw message
     }
   }
@@ -33,7 +33,7 @@ hooks.after.providersBooted(() => {
       argValue = argValue[argfield]
     }
 
-    if (Moment(value).isBefore(Moment(argValue)) === false) {
+    if (moment(value).isBefore(moment(argValue)) === false) {
       throw message;
     }
   }
@@ -55,7 +55,7 @@ hooks.after.providersBooted(() => {
       argValue = argValue[argfield]
     }
 
-    if (Moment(value).isAfter(Moment(argValue)) === false) {
+    if (moment(value).isAfter(moment(argValue)) === false) {
       throw message;
     }
   }
