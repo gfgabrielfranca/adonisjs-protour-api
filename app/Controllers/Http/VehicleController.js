@@ -8,7 +8,6 @@ const fs = require('fs')
 
 const Vehicle = use('App/Models/Vehicle')
 const Helpers = use('Helpers')
-const Drive = use('Drive')
 
 const removeFile = Helpers.promisify(fs.unlink)
 const exists = Helpers.promisify(fs.stat)
@@ -47,54 +46,13 @@ class VehicleController {
     const data = request.all()
     const photo = request.file('photo')
 
-    try {
-      const ContentType = file.headers['content-type']
-      const ACL = 'public-read'
-
-      Vehicle.photo = await Drive.put(`${vehicle.id}.${photo.subtype}`, file.stream, {
-        ContentType,
-        ACL
-      })
-      await vehicle.save()
-
-    } catch (error) {
-      return response.status(error.status).send({
-        error: {
-          message: "Não foi possível enviar o arquivo",
-          error_message: error.message
-        }
-      })
-    }
-
     const vehicle = await Vehicle.create(data)
+    vehicle.photo = `${vehicle.id}.${photo.subtype}`
+    await vehicle.save()
 
-    // await request.multipart.file('photo', {
-    //   types: ['jpeg', 'jpg', 'png'],
-    //   size: '2mb'
-    // }, async (photo) => {
-    //   try {
-    //     const ContentType = file.headers['content-type']
-    //     const ACL = 'public-read'
-
-    //     Vehicle.photo = await Drive.put(`${vehicle.id}.${photo.subtype}`, file.stream, {
-    //       ContentType,
-    //       ACL
-    //     })
-    //     await vehicle.save()
-
-    //   } catch (error) {
-    //     return response.status(error.status).send({
-    //       error: {
-    //         message: "Não foi possível enviar o arquivo",
-    //         error_message: error.message
-    //       }
-    //     })
-    //   }
-    // }).process()
-
-    // await photo.move(Helpers.tmpPath('uploads/vehicles'), {
-    //   name: vehicle.photo
-    // })
+    await photo.move(Helpers.tmpPath('uploads/vehicles'), {
+      name: vehicle.photo
+    })
 
     return vehicle
   }
