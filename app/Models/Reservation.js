@@ -2,7 +2,7 @@
 
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('Model')
-const Moment = use('Moment')
+const Moment = use('moment')
 
 class Reservation extends Model {
   static get hidden () {
