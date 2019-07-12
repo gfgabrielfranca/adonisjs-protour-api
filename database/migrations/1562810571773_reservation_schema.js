@@ -6,15 +6,15 @@ const Schema = use('Schema')
 class ReservationSchema extends Schema {
   up () {
     this.table('reservations', (table) => {
-      table.timestamp('reservation').notNullable()
-      table.timestamp('devolution').notNullable()
+      table.timestamp('reservation').notNullable().alter()
+      table.timestamp('devolution').notNullable().alter()
     })
   }
 
   down () {
     this.table('reservations', (table) => {
-      table.date('reservation').notNullable()
-      table.date('devolution').notNullable()
+      table.date('reservation').notNullable().alter()
+      table.date('devolution').notNullable().alter()
     })
   }
 }
