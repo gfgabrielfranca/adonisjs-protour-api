@@ -6,7 +6,7 @@ class UpdateCliente {
       name: 'max:128',
       email: 'email',
       nationality: 'max:128',
-      document_number: 'in:CPF,Passaporte,Estrangeiro',
+      document: 'in:CPF,Passaporte,Estrangeiro',
     }
   }
 }
